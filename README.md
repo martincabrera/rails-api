@@ -1,6 +1,5 @@
 # README #
 
-SAMPLE API Project
 
 ### SAMPLE API Project ###
 
