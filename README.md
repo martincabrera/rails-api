@@ -5,7 +5,6 @@
 
 * Ruby 2.1 & Rails 4.2
 
-
 ### Database setup (SQLite) ###
 
 * rake db:create
@@ -14,5 +13,4 @@
 
 ### How to test the API ###
 
-* rake test # to run all 23 tests and passing! :) 
-
+* rake test # to run all 23 tests and passing! :)
