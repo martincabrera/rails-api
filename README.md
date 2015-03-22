@@ -7,7 +7,7 @@ SAMPLE API Project
 * Ruby 2.1 & Rails 4.2
 
 
-### Database setup ###
+### Database setup (SQLite) ###
 
 * rake db:create
 * rake db:migrate
