@@ -84,17 +84,23 @@ class ListingCoursesTest < ActionDispatch::IntegrationTest
 
   # Destroy section
   test 'should have successful destroy by admin' do
-    delete "/courses/#{@course.id}", {}, {'Authorization' => encode_credentials(@admin.name, @admin.password)}
+    assert_difference('Course.count', -1) do
+      delete "/courses/#{@course.id}", {}, {'Authorization' => encode_credentials(@admin.name, @admin.password)}
+    end
     assert_equal 204, response.status
   end
 
   test 'should have successful destroy by user who is user for this course' do
-    delete "/courses/#{@course.id}", {}, {'Authorization' => encode_credentials(@user.name, @user.password)}
+    assert_difference('Course.count', -1) do
+      delete "/courses/#{@course.id}", {}, {'Authorization' => encode_credentials(@user.name, @user.password)}
+    end
     assert_equal 204, response.status
   end
 
   test 'should have Unsuccesful destroy (403) by user who is guest for this course' do
-    delete "/courses/#{@course.id}", {}, {'Authorization' => encode_credentials(@user2.name, @user2.password)}
+    assert_difference('Course.count', 0) do
+      delete "/courses/#{@course.id}", {}, {'Authorization' => encode_credentials(@user2.name, @user2.password)}
+    end
     assert_equal 403, response.status
   end
 
