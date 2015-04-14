@@ -43,11 +43,6 @@ class V1::CoursesController < ApplicationController
     params.require(:course).permit(:name)
   end
 
-  def render_unauthorized
-    self.headers['WWW-Authenticate'] = 'Token realm="Courses"'
-    render json: 'Bad credentials', status: :unauthorized
-  end
-
   def find_course
     @course = Course.find(params[:id])
   end

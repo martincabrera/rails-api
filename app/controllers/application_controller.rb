@@ -31,6 +31,11 @@ class ApplicationController < ActionController::Base
     @current_user ||= nil
   end
 
+  def render_unauthorized
+    self.headers['WWW-Authenticate'] = 'Token realm="Application"'
+    render json: 'Bad credentials', status: :unauthorized
+  end
+
   def user_forbidden
     render json: 'Forbidden for this user', status: :forbidden
   end
