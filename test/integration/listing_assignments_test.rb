@@ -100,17 +100,23 @@ class ListingAssignmentsTest < ActionDispatch::IntegrationTest
 
   # Destroy section
   test 'should have successful assignment destroy by admin' do
-    delete "/courses/#{@course.id}/assignments/#{@course.assignments.first.id}", {}, {'Authorization' => encode_credentials(@admin.name, @admin.password)}
+    assert_difference('Assignment.count', -1) do
+      delete "/courses/#{@course.id}/assignments/#{@course.assignments.first.id}", {}, {'Authorization' => encode_credentials(@admin.name, @admin.password)}
+    end
     assert_equal 204, response.status
   end
 
   test 'should have successful assignment destroy by user who is user for this course' do
-    delete "/courses/#{@course.id}/assignments/#{@course.assignments.first.id}", {}, {'Authorization' => encode_credentials(@user.name, @user.password)}
+    assert_difference('Assignment.count', -1) do
+      delete "/courses/#{@course.id}/assignments/#{@course.assignments.first.id}", {}, {'Authorization' => encode_credentials(@user.name, @user.password)}
+    end
     assert_equal 204, response.status
   end
 
   test 'should have Unsuccesful assignment destroy (403) by user who is guest for this course' do
-    delete "/courses/#{@course.id}/assignments/#{@course.assignments.first.id}", {}, {'Authorization' => encode_credentials(@user2.name, @user2.password)}
+    assert_difference('Assignment.count', 0) do
+      delete "/courses/#{@course.id}/assignments/#{@course.assignments.first.id}", {}, {'Authorization' => encode_credentials(@user2.name, @user2.password)}
+    end
     assert_equal 403, response.status
   end
 
