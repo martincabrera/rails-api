@@ -35,12 +35,13 @@ class ListingAssignmentsTest < ActionDispatch::IntegrationTest
 
   # Create section
   test 'should create one assignment when admin' do
-    post "/courses/#{@course.id}/assignments",
-         {assignment:
-              {name: 'Assignment #1', description: 'This is the description for assignment #1' }
-         }.to_json,
-         {'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s, 'Authorization' => encode_credentials(@admin.name, @admin.password)}
-
+    assert_difference('Assignment.count', 1) do
+      post "/courses/#{@course.id}/assignments",
+           {assignment:
+                {name: 'Assignment #1', description: 'This is the description for assignment #1'}
+           }.to_json,
+           {'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s, 'Authorization' => encode_credentials(@admin.name, @admin.password)}
+    end
     assert_equal 201, response.status
     assert_equal Mime::JSON, response.content_type
 
@@ -49,12 +50,13 @@ class ListingAssignmentsTest < ActionDispatch::IntegrationTest
   end
 
   test 'should create one assignment when user from this course' do
-    post "/courses/#{@course.id}/assignments",
-         {assignment:
-              {name: 'Assignment #1', description: 'This is the description for assignment #1' }
-         }.to_json,
-         {'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s, 'Authorization' => encode_credentials(@user.name, @user.password)}
-
+    assert_difference('Assignment.count', 1) do
+      post "/courses/#{@course.id}/assignments",
+           {assignment:
+                {name: 'Assignment #1', description: 'This is the description for assignment #1'}
+           }.to_json,
+           {'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s, 'Authorization' => encode_credentials(@user.name, @user.password)}
+    end
     assert_equal 201, response.status
     assert_equal Mime::JSON, response.content_type
 
@@ -63,11 +65,13 @@ class ListingAssignmentsTest < ActionDispatch::IntegrationTest
   end
 
   test 'should NOT create one course when guest from this course' do
-    post "/courses/#{@course.id}/assignments",
-         {assignment:
-              {name: 'Assignment #1', description: 'This is the description for assignment #1' }
-         }.to_json,
-         {'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s, 'Authorization' => encode_credentials(@user2.name, @user2.password)}
+    assert_difference('Assignment.count', 0) do
+      post "/courses/#{@course.id}/assignments",
+           {assignment:
+                {name: 'Assignment #1', description: 'This is the description for assignment #1'}
+           }.to_json,
+           {'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s, 'Authorization' => encode_credentials(@user2.name, @user2.password)}
+    end
     assert_equal 403, response.status
   end
 
