@@ -32,13 +32,14 @@ class ListingCoursesTest < ActionDispatch::IntegrationTest
 
   # Create section
   test 'should create one course when admin' do
-    post '/courses',
+    assert_difference('Course.count', 1) do
+      post '/courses',
 
-         {course:
-              {name: 'PHP'}
-         }.to_json,
-         {'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s, 'Authorization' => encode_credentials(@admin.name, @admin.password)}
-
+           {course:
+                {name: 'PHP'}
+           }.to_json,
+           {'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s, 'Authorization' => encode_credentials(@admin.name, @admin.password)}
+    end
     assert_equal 201, response.status
     assert_equal Mime::JSON, response.content_type
 
@@ -47,11 +48,13 @@ class ListingCoursesTest < ActionDispatch::IntegrationTest
   end
 
   test 'should NOT create one course when NOT admin' do
-    post '/courses',
-         {course:
-              {name: 'PHP'}
-         }.to_json,
-         {'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s, 'Authorization' => encode_credentials(@user.name, @user.password)}
+    assert_difference('Course.count', 0) do
+      post '/courses',
+           {course:
+                {name: 'PHP'}
+           }.to_json,
+           {'Accept' => Mime::JSON, 'Content-Type' => Mime::JSON.to_s, 'Authorization' => encode_credentials(@user.name, @user.password)}
+    end
     assert_equal 403, response.status
   end
 
