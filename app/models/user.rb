@@ -2,24 +2,21 @@
 #
 # Table name: users
 #
-#  id         :integer          not null, primary key
-#  name       :string
-#  password   :string
-#  is_admin   :boolean          default(FALSE)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id              :integer          not null, primary key
+#  name            :string
+#  is_admin        :boolean          default(FALSE)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  password_digest :string
 #
 
 class User < ActiveRecord::Base
 
+  has_secure_password
+
   #relations
   has_many :memberships, dependent: :delete_all
   has_many :courses, through: :memberships
-
-
-  def self.authenticate(username, password)
-    User.exists?(name: username, password: password)
-  end
 
   def admin?
     is_admin

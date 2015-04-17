@@ -18,8 +18,10 @@ class ApplicationController < ActionController::Base
 
   def authenticate_basic_auth
     authenticate_with_http_basic do |name, password|
-      @current_user = User.where(name: name, password: password).first if User.authenticate(name, password)
-      User.authenticate(name, password)
+      return false if User.where(name: name).blank?
+      local_user = User.find_by(name: name)
+      @current_user = local_user if local_user.authenticate(password)
+      local_user.authenticate(password)
     end
   end
 
